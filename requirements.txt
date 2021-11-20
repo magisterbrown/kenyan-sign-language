@@ -13,3 +13,5 @@ matplotlib
 scikit-learn
 pathlib
 torch
+fastai
+warnings
