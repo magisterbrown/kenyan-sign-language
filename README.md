@@ -20,6 +20,9 @@ https://dzone.com/articles/data-science-project-folder-structure
 	- test: test data
 - pipeline: Scripts to re-train (and test) the model in an automated manner. 
 - docs
+- config
+	- __init__.py: so that we can import files inside this folder
+	- paths.py: includes special variables and paths
 
 ## Git
 Follow these standards:
@@ -67,6 +70,25 @@ Don't ever edit your raw data, especially not manually, and especially not in Ex
 
 Also, if data is immutable, it doesn't need source control in the same way that code does. Therefore, by default, the data folder is included in the .gitignore file. If you have a small amount of data that rarely changes, you may want to include the data in the repository. Github currently warns if files are over 50MB and rejects files over 100MB. Some other options for storing/syncing large data include AWS S3 with a syncing tool (e.g., s3cmd), Git Large File Storage, Git Annex, and dat. Currently by default, we ask for an S3 bucket and use AWS CLI to sync data in the data folder with the server.
 
+### Paths
+Have a config.py file as such:
+```
+from pathlib import Path  # pathlib is seriously awesome!
+
+data_dir = Path('/path/to/some/logical/parent/dir')
+data_path = data_dir / 'my_file.csv'  # use feather files if possible!
+
+customer_db_url = 'sql:///customer/db/url'
+purchases_db_url = 'sql:///purchases/db/url'
+```
+
+Import this file from others:
+```
+from projectname.config import data_path
+import pandas as pd
+
+df = pd.read_csv(data_path)  # clean!
+```
 
 # Computing Power
 
