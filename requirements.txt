@@ -11,7 +11,7 @@ numpy
 pandas
 matplotlib
 scikit-learn
-pathlib
+pathlib2
 torch
 fastai
-warnings
+pytest-warnings
