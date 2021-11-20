@@ -21,7 +21,7 @@ https://dzone.com/articles/data-science-project-folder-structure
 - pipeline: Scripts to re-train (and test) the model in an automated manner. 
 - docs
 - config
-	- __init__.py: so that we can import files inside this folder
+	- __ init __.py: so that we can import files inside this folder
 	- paths.py: includes special variables and paths
 
 ## Git

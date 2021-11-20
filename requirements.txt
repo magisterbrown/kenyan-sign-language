@@ -1,0 +1,15 @@
+ipython
+jupyter
+notebook
+numpy
+pandas
+seaborn
+python-dotenv
+pytest
+tqdm
+numpy
+pandas
+matplotlib
+scikit-learn
+pathlib
+torch
