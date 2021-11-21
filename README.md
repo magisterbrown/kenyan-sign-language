@@ -30,10 +30,22 @@ Follow these standards:
 - Use ```kebab-case``` for branch names
 - Specify the type of a commit and explain clearly what the piece of code accomplishes. An example commit:
 ``` 
-feat: Added pre-processing function
+feat: Add preprocessing function
 <Description of the function>
 Closes #12 
 ```
+A properly formed git commit subject line should always be able to complete the following sentence:
+If applied, this commit will <your subject line here>
+
+### Types
+feat: A new feature
+fix: A bug fix
+doc: Documentation only changes
+style: Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc)
+refactor: A code change that neither fixes a bug or adds a feature
+perf: A code change that improves performance
+test: Adding missing tests
+chore: Changes to the build process or auxiliary tools and libraries such as documentation generation
 
 ## Notebooks
 Notebook packages like the Jupyter notebook, Beaker notebook, Zeppelin, and other literate programming tools are very effective for exploratory data analysis. However, these tools can be less effective for reproducing an analysis. When we use notebooks in our work, we often subdivide the notebooks folder. For example, `notebooks/exploratory` contains initial explorations, whereas `notebooks/reports` is more polished work that can be exported as html to the reports directory.
