@@ -4,7 +4,6 @@ notebook
 numpy
 pandas
 seaborn
-python-dotenv
 pytest
 tqdm
 numpy
