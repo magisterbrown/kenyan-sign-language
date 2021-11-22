@@ -9,7 +9,6 @@ tqdm
 numpy
 pandas
 matplotlib
-scikit-learn
 pathlib2
 torch
 fastai
