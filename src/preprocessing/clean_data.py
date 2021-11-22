@@ -1,4 +1,4 @@
-from config.paths import train_path
+from config.paths import train_path, test_path, data_dir
 
 
 if __name__ == "__main__":
