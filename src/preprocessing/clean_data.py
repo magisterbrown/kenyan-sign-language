@@ -1,5 +1,5 @@
-from config.paths import data_path
+from config.paths import train_path
 
 
 if __name__ == "__main__":
-    print(data_path)
+    print(train_path)
