@@ -14,10 +14,11 @@ def from_image_to_numpy():
         im = Image.open(os.path.join(image_path, item)).convert("RGB")
         if not (os.path.exists(npy_path)):
             os.mkdir(npy_path)
-        data_path = os.path.join(npy_path, item[:-4]+'.npy')
+        data_path = os.path.join(npy_path, item[:-4] + '.npy')
         image_array = np.array(im)
         np.save(data_path, image_array)
 
 
 if __name__ == '__main__':
     from_image_to_numpy()
+
