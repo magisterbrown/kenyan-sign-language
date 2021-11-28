@@ -1,31 +1,43 @@
 # Path to image directory
-import os
 from PIL import Image
 import os, sys
 import numpy as np
-from config.paths import image_path, npy_path
+from config.paths import image_path, npy_path, resized_npy_path
 
 
-def from_image_to_numpy(resize=False, resized_path=None):
+def from_image_to_numpy(resize_path=None):
     dirs = os.listdir(str(image_path))
     dirs.sort()
+    # npy_path for non resized npys
     path = npy_path
 
-    if resize:
-        # TODO: add resize function
-        print('resize')
-        path = resized_path
+    # resize path for resized image npys
+    if resize_path is not None:
+        path = resize_path
 
     for item in dirs:
-        im = Image.open(os.path.join(image_path, item)).convert("RGB")
+        image = Image.open(os.path.join(image_path, item)).convert("RGB")
+
+        # resize images to 720x720 to normalize
+        if resize_path is not None:
+            image = image.resize((720, 720), Image.ANTIALIAS)
+
+        # if path doesn't exist create the directory
         if not (os.path.exists(path)):
             os.mkdir(path)
 
+        # save the image representing npy to the path with the same image name
         data_path = os.path.join(path, item[:-4] + '.npy')
-        image_array = np.array(im)
+        image_array = np.array(image)
         np.save(data_path, image_array)
 
 
 if __name__ == '__main__':
-    from_image_to_numpy()
+    '''
+    Run only one 
+    1. first one for non resized images
+    2. second one for resized images
+    '''
 
+    # from_image_to_numpy()
+    from_image_to_numpy(resized_npy_path)

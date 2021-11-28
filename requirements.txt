@@ -1,8 +1,8 @@
 ipython
 jupyter
 notebook
-numpy
-pandas
+numpy~=1.21.4
+pandas~=1.3.4
 seaborn
 pytest
 tqdm
@@ -10,6 +10,7 @@ numpy
 pandas
 matplotlib
 pathlib2
-torch
+torch~=1.10.0
 fastai
 pytest-warnings
+Pillow~=8.4.0
