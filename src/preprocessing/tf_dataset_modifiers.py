@@ -25,9 +25,9 @@ class TfParser:
 class TfLabler(TfParser):
     def __init__(self):
         super().__init__()
-        self.fetures['lable'] = tf.io.FixedLenFeature([], tf.string)
+        self.fetures['lable'] = tf.io.FixedLenFeature([], tf.int64)
 
     def construct_output(self, content):
-        lable = tf.io.parse_tensor(content["lable"],tf.uint8)
+        lable = tf.cast(content["lable"],tf.int32)
         image = self.process_image(image)
         return image, lable
