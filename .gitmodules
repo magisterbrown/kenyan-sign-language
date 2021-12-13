@@ -1,0 +1,3 @@
+[submodule "src/hyperoptim/klrfinder"]
+	path = src/hyperoptim/klrfinder
+	url = git@github.com:magisterbrown/keras_lr_finder.git
