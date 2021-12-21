@@ -4,19 +4,27 @@ from tensorflow.keras.models import Model
 from tensorflow.keras.layers import Dense
 from tensorflow.keras.layers import GlobalAveragePooling2D
 
-class ResNet34(Model):
-  def __init__(self):
+class FullRes34(Model):
+  def __init__(self,n_hidden,drop):
     super().__init__()
     ResNet34, preprocess_input = Classifiers.get('resnet34')
-    self.backbone = ResNet34(input_shape=(480,480,3),weights='imagenet',include_top=False)
-    self.pool = GlobalAveragePooling2D()
-    self.d1 = Dense(512,activation='relu')
-    self.d2 = Dense(12,activation='sigmoid')
+    self.back = ResNet34((224, 224, 3),include_top=False)
+    self.apool = GlobalAveragePooling2D()
+    self.drop = tf.keras.layers.Dropout(drop)
+    self.bn = tf.keras.layers.BatchNormalization()
+    self.d1 = Dense(n_hidden,activation='relu')
+    self.d2 = Dense(9,activation='softmax')
 
-  def call(self, x):
-    x = self.backbone(x)
+  def load_back(self,path):
+    self.back.load_weights(path)
+
+  def set_back(self,weights):
+    self.back.set_weights(weights)
+
+  def call(self,x,training):
+    x = self.back(x,training=training)
+    x = self.apool(x)
+    x = self.drop(x,training=training)
     x = self.d1(x)
     x = self.d2(x)
-    x = x*25.2-0.1
-    x = tf.reshape(x, shape=[-1,1])
     return x
