@@ -23,7 +23,6 @@ class TfParser:
         for operation in self.processors:
           image = operation(image)
         return image
-
 #Parses image with lable int from tf.dataset
 class TfLabler(TfParser):
     def __init__(self, *args, **kwargs):
@@ -35,6 +34,7 @@ class TfLabler(TfParser):
         image = self.process_image(content)
         return image, lable
 
+#Parse images for the submission file
 class TfSubmiter(TfParser):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -44,3 +44,17 @@ class TfSubmiter(TfParser):
         lable = content["id"]
         image = self.process_image(content)
         return image, lable
+
+#Parse datasets to create cross validation predictions
+class TfPresenter(TfParser):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.features['lable'] = tf.io.FixedLenFeature([], tf.int64)
+        self.features['id'] = tf.io.FixedLenFeature([], tf.string)
+
+    def construct_output(self, content):
+        lable = tf.cast(content["lable"],tf.int32)
+        id = content["id"]
+        image = self.process_image(content)
+        return image, lable, id
+
