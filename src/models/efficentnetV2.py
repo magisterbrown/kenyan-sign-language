@@ -1,3 +1,9 @@
+import tensorflow as tf
+from tensorflow.keras.models import Model
+from tensorflow.keras.layers import Dense
+from tensorflow.keras.layers import GlobalAveragePooling2D
+from tensorflow.keras.layers import BatchNormalization
+
 #Create tf effeceint net V2 model 
 class EffiecntHead(Model):
   def __init__(self,n_hidden,drop,back):
