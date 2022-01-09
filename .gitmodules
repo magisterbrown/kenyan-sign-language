@@ -1,6 +1,6 @@
 [submodule "src/hyperoptim/klrfinder"]
 	path = src/hyperoptim/klrfinder
-	url = git@github.com:magisterbrown/keras_lr_finder.git
+	url = https://github.com/magisterbrown/keras_lr_finder.git
 [submodule "models/tensorflow/automl"]
 	path = models/tensorflow/automl
 	url = https://github.com/google/automl
