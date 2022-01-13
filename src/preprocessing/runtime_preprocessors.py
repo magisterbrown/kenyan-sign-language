@@ -4,6 +4,7 @@ sys.path.append("../../models/tensorflow/automl/efficientnetv2")
 from effnetv2_model import get_model
 from autoaugment import _parse_policy_info
 from hparams import Config
+import tensorflow.compat.v1 as tf1
 
 def resize(image,side=224):
   image = tf.image.resize(image,(224,224))
@@ -21,16 +22,16 @@ def randaugment_with_chioce(image, num_layers, magnitude, available_ops):
   augmentation_params = Config(cutout_const=40, translate_const=100)
 
   for layer_num in range(num_layers):
-    op_to_select = tf.random_uniform(
-        [], maxval=len(available_ops), dtype=tf.int32)
+    op_to_select = tf1.random_uniform(
+        [], maxval=len(available_ops), dtype=tf1.int32)
     random_magnitude = float(magnitude)
-    with tf.name_scope('randaug_layer_{}'.format(layer_num)):
+    with tf1.name_scope('randaug_layer_{}'.format(layer_num)):
       for (i, op_name) in enumerate(available_ops):
-        prob = tf.random_uniform([], minval=0.2, maxval=0.8, dtype=tf.float32)
+        prob = tf1.random_uniform([], minval=0.2, maxval=0.8, dtype=tf1.float32)
         func, _, args = _parse_policy_info(op_name, prob, random_magnitude,
                                            replace_value, augmentation_params)
-        image = tf.cond(
-            tf.equal(i, op_to_select),
+        image = tf1.cond(
+            tf1.equal(i, op_to_select),
             lambda selected_func=func, selected_args=args: selected_func(
                 image, *selected_args),
             lambda: image)
