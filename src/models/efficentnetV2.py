@@ -22,7 +22,7 @@ class EffiecntHead(Model):
   def call(self,x,training):
     x = self.back(x,training=training)
     x = self.drop(x,training=training)
-    x = self.d1(x)
-    x = self.d2(x)
+    x = self.d1(x,training=training)
+    x = self.d2(x,training=training)
     
     return x
