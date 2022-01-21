@@ -8,7 +8,6 @@ class LandmarkHead(Model):
   def __init__(self,back):
     super().__init__()
     self.back = back
-    self.drop = tf.keras.layers.Dropout(drop)
     self.d1 = Dense(512)
     self.activation = PReLU()
     self.bn = BatchNormalization()
