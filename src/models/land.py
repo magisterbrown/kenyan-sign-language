@@ -2,6 +2,7 @@ import tensorflow as tf
 from tensorflow.keras.models import Model
 from tensorflow.keras.layers import Dense
 from tensorflow.keras.layers import BatchNormalization
+from tf.keras.layers import PReLU
 
 #Create cnn with head from landmark-recognition-2020 competition winners
 class LandmarkHead(Model):
@@ -9,8 +10,8 @@ class LandmarkHead(Model):
     super().__init__()
     self.back = back
     self.d1 = Dense(512)
-    self.activation = PReLU()
     self.bn = BatchNormalization()
+    self.activation = PReLU()
     self.d2 = Dense(9,activation='softmax')
 
   def load_back(self,path):
@@ -25,3 +26,5 @@ class LandmarkHead(Model):
     x = self.bn(x,training=training)
     x = self.activation(x,training=training)
     x = self.d2(x,training=training)
+    
+    return x
