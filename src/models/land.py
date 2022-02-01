@@ -2,7 +2,7 @@ import tensorflow as tf
 from tensorflow.keras.models import Model
 from tensorflow.keras.layers import Dense
 from tensorflow.keras.layers import BatchNormalization
-from tf.keras.layers import PReLU
+from tensorflow.keras.layers import PReLU
 
 #Create cnn with head from landmark-recognition-2020 competition winners
 class LandmarkHead(Model):
