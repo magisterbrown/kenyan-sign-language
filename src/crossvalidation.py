@@ -1,5 +1,7 @@
-import tensorflow as tf
-
+from src.crossvalidation import CrossDataset
+from src.preprocessing.tf_dataset_parsers import TfLabler
+from src.preprocessing.tf_dataset_parsers import TfPresenter
+import math
 class CrossPart:
   counting_batch = 64
 
@@ -67,3 +69,24 @@ class CrossDataset:
         ds0 = ds0.concatenate(tf.data.Dataset.from_tensors(ds1))
         
     return ds0
+class CrossBatches(CrossDataset):
+  def __init__(self, bs: int, immods, *args,**kwargs):
+    super().__init__(*args,**kwargs)
+    self.immods = immods
+    self.bs = bs
+
+  def get_split(self, test_ids: list):
+    train, test = super().get_split(test_ids)
+    parser = TfLabler(processors=self.immods)
+    train = train.map(parser, num_parallel_calls=tf.data.AUTOTUNE).shuffle(128, reshuffle_each_iteration=True).batch(self.bs,drop_remainder=True)
+
+    presenter = TfPresenter(processors=[self.immods[-1]])
+    test = test.map(presenter, num_parallel_calls=tf.data.AUTOTUNE).batch(self.bs)
+
+    return train, test
+
+  def get_sizes(self, test_ids: list):
+    trains, tests = super().get_sizes(test_ids)
+    trains = trains//self.bs
+    tests = int(math.ceil(tests/self.bs))
+    return trains, tests
