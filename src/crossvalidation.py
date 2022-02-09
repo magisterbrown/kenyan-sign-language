@@ -1,3 +1,4 @@
+import tensorflow as tf
 from src.preprocessing.tf_dataset_parsers import TfLabler
 from src.preprocessing.tf_dataset_parsers import TfPresenter
 import math
