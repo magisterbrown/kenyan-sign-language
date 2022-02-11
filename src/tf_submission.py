@@ -1,5 +1,8 @@
 import pandas as pd
+import numpy as np
 import tensorflow as tf
+import math
+
 from src.crossvalidation import CrossDataset
 from src.preprocessing.tf_dataset_parsers import TfLabler
 from src.preprocessing.tf_dataset_parsers import TfPresenter
@@ -18,43 +21,39 @@ def generator(loader, model, df):
     
     return df
 
-# Cross validation predictions
-
-import math
-
 class CrossBatches(CrossDataset):
-  def __init__(self, bs: int, immods, *args,**kwargs):
-    # super().__init__(*args,**kwargs)
-    self.immods = immods
+  def __init__(self, bs: int, modifiers, *args,**kwargs):
+    super().__init__(*args,**kwargs)
     self.bs = bs
+    self.modifiers = modifiers
 
   def get_split(self, test_ids: list):
     train, test = super().get_split(test_ids)
-    print(self.immods)
-    parser = TfLabler(processors=self.immods)
+    parser = TfLabler(processors=self.modifiers)
     train = train.map(parser, num_parallel_calls=tf.data.AUTOTUNE).shuffle(128, reshuffle_each_iteration=True).batch(self.bs,drop_remainder=True)
 
-    presenter = TfPresenter(processors=self.immods[-1])
+    presenter = TfPresenter(processors=[self.modifiers[-1]])
     test = test.map(presenter, num_parallel_calls=tf.data.AUTOTUNE).batch(self.bs)
 
     return train, test
 
   def get_sizes(self, test_ids: list):
-    # trains, tests = 1,1#super().get_sizes(test_ids)
-    # trains = trains//self.bs
-    # tests = int(math.ceil(tests/self.bs))
+    trains, tests = super().get_sizes(test_ids)
+    trains = trains//self.bs
+    tests = int(math.ceil(tests/self.bs))
     return trains, tests
 
-
 class CrossTrain:
-  def __init__(self, dataset: CrossDataset, model):
+  def __init__(self, dataset: CrossDataset, model, epochs: int, verbose=False):
     self.model = model
-    model.save_point("crossstart")
+    model.save_weights("gs://chimps-first/saves/crossstart")
     self.ds = dataset
-
+    self.epochs = epochs
+    self.verbose = verbose
+  
   def case(self, train):
-    self.model.load_point("crossstart")
-    self.model.fit(train, epochs=27, verbose=False)
+    self.model.save_weights("gs://chimps-first/saves/crossstart")
+    self.model.fit(train, epochs=self.epochs, verbose=self.verbose)
 
   def make_pred(self,test):
     embeddings = list()
@@ -64,10 +63,10 @@ class CrossTrain:
       embed,pred = model.get_embed(image)
       ids = pd.Series(id.numpy())
       lables = pd.Series(lable.numpy())
-
+     
       embeddings.append(self.res_to_df(embed,ids,lables))
       predictions.append(self.res_to_df(pred,ids,lables))
-
+      
     embeddings = pd.concat(embeddings)
     predictions = pd.concat(predictions)
     return embeddings, predictions
@@ -83,10 +82,10 @@ class CrossTrain:
     return np.reshape(np.arange(10,),(-1,2))
 
   def train(self):
-
+   
     all_empbs = list()
     all_preds = list()
-
+    
     for key, comb in enumerate(self.test_combinations()):
       train,test = self.ds.get_split(comb)
       print(f'Model: {key+1}')
