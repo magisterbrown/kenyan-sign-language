@@ -60,7 +60,7 @@ class CrossTrain:
     predictions = list()
     for el in test:
       image,lable,id = el
-      embed,pred = model.get_embed(image)
+      embed,pred = self.model.get_embed(image)
       ids = pd.Series(id.numpy())
       lables = pd.Series(lable.numpy())
      
