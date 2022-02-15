@@ -19,6 +19,16 @@ class EffiecntHead(Model):
   def set_back(self,weights):
     self.back.set_weights(weights)
 
+  def get_embed(self,x):
+    training = False
+    x = self.back(x,training=training)
+    x = self.drop(x,training=training)
+    x = self.d1(x,training=training)
+    x = self.d2(x,training=training)
+    
+    return x,x
+
+
   def call(self,x,training):
     x = self.back(x,training=training)
     x = self.drop(x,training=training)
